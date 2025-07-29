@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace Domain.Entity
 {
-    public class Category
+    public class SubCategory
     {
-        public int CategoryId { get; set; }
+        public int SubCategoryId { get; set; }
+
         public required string Name { get; set; }
 
-        public List<SubCategory>? SubCategories { get; set; } 
+        public int CategoryId { get; set; }
+
+        public Category Category { get; set; } = null!;
     }
 }

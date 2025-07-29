@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entity
+namespace Application.DTO.SubCategory
 {
-    public class Category
+    public class CSubCategoryDto
     {
-        public int CategoryId { get; set; }
         public required string Name { get; set; }
-
-        public List<SubCategory>? SubCategories { get; set; } 
     }
 }

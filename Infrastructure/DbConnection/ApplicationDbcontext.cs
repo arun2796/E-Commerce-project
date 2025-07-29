@@ -19,6 +19,8 @@ namespace CInfrastructure.Dbconnection
 
         public DbSet<Category> Category { get; set; }
 
+        public DbSet<SubCategory> SubCategories { get; set; }
+
         public DbSet<Brand> Brand { get; set; }
 
         public DbSet<ProductImages> ProductImage { get; set; } 
