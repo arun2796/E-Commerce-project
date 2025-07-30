@@ -43,11 +43,32 @@ namespace CInfrastructure.Migrations
                 {
                     CategoryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SubCategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Category", x => x.CategoryId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubCategories",
+                columns: table => new
+                {
+                    SubCategoryId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubCategories", x => x.SubCategoryId);
+                    table.ForeignKey(
+                        name: "FK_SubCategories_Category_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Category",
+                        principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -61,7 +82,8 @@ namespace CInfrastructure.Migrations
                     Price = table.Column<double>(type: "float", nullable: false),
                     StockQuantity = table.Column<int>(type: "int", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    BrandId = table.Column<int>(type: "int", nullable: false)
+                    BrandId = table.Column<int>(type: "int", nullable: false),
+                    SubCategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -77,6 +99,12 @@ namespace CInfrastructure.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Category",
                         principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Products_SubCategories_SubCategoryId",
+                        column: x => x.SubCategoryId,
+                        principalTable: "SubCategories",
+                        principalColumn: "SubCategoryId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -90,7 +118,8 @@ namespace CInfrastructure.Migrations
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     BrandId = table.Column<int>(type: "int", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    BasketId = table.Column<int>(type: "int", nullable: false)
+                    BasketId = table.Column<int>(type: "int", nullable: false),
+                    BasketId1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -101,6 +130,11 @@ namespace CInfrastructure.Migrations
                         principalTable: "Basket",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BasketItem_Basket_BasketId1",
+                        column: x => x.BasketId1,
+                        principalTable: "Basket",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_BasketItem_Brand_BrandId",
                         column: x => x.BrandId,
@@ -148,6 +182,11 @@ namespace CInfrastructure.Migrations
                 column: "BasketId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BasketItem_BasketId1",
+                table: "BasketItem",
+                column: "BasketId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BasketItem_BrandId",
                 table: "BasketItem",
                 column: "BrandId");
@@ -176,6 +215,16 @@ namespace CInfrastructure.Migrations
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_SubCategoryId",
+                table: "Products",
+                column: "SubCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubCategories_CategoryId",
+                table: "SubCategories",
+                column: "CategoryId");
         }
 
         /// <inheritdoc />
@@ -195,6 +244,9 @@ namespace CInfrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Brand");
+
+            migrationBuilder.DropTable(
+                name: "SubCategories");
 
             migrationBuilder.DropTable(
                 name: "Category");

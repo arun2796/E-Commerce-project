@@ -11,6 +11,8 @@ namespace Domain.Entity
         public int CategoryId { get; set; }
         public required string Name { get; set; }
 
+        public int SubCategoryId { get; set; }
+
         public List<SubCategory>? SubCategories { get; set; } 
     }
 }

@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Application.DTO.BrandDtoF;
+using Application.DTO.CategoryDtoF;
+using Application.DTO.ProductImageDto;
+using Domain.Entity;
+
+namespace Application.DTO.ProductDto
+{
+    public class GProductDto
+    {
+        public int ProductId { get; set; }   
+        public required string Name { get; set; }
+        public required string Description { get; set; }
+
+        public double Price { get; set; }
+        public int StockQuantity { get; set; }
+
+        public int CategoryId { get; set; }
+
+        public string CategoryName { get; set; } = null!;
+        public int BrandId { get; set; }
+
+        public string BrandName { get; set;} = null!;
+
+        public int SubCategoryId {  get; set; }
+
+        public string SubCategoryName {  get; set; } = null!;   
+
+        public List<string> Images { get; set; } = [];
+    }
+}

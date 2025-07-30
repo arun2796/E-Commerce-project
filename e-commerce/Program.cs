@@ -13,6 +13,12 @@ builder.Services.AddDbContext<ApplicationDbcontext>( option =>
 );
 #endregion
 
+#region frontend connection
+
+builder.Services.AddCors(opt=>opt.AddPolicy("Policy",p=>p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
+#endregion
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -20,6 +26,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+app.UseCors("Policy");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

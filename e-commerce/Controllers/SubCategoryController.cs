@@ -2,7 +2,7 @@
 using Application.DTO.SubCategory;
 using AutoMapper;
 using CInfrastructure.Dbconnection;
-using CInfrastructure.Migrations;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

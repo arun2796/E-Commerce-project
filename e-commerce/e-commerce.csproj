@@ -27,4 +27,8 @@
     <ProjectReference Include="..\Infrastructure\CInfrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\BrandLogo\" />
+  </ItemGroup>
+
 </Project>

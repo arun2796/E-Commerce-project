@@ -3,7 +3,7 @@ using Application.DTO.CategoryDtoF;
 using Application.DTO.SubCategory;
 using AutoMapper;
 using CInfrastructure.Dbconnection;
-using CInfrastructure.Migrations;
+
 using Domain.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -159,10 +159,14 @@ namespace e_commerce.Controllers
             var subcategory = _mapper.Map<SubCategory>(dto);
             subcategory.CategoryId= categoryId;
 
+           
+
             _context.SubCategories.Add(subcategory);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetSubCategoryById), new { id = subcategory.SubCategoryId }, subcategory);
+            var resultDto = _mapper.Map<SubcategoryDto>(subcategory);
+
+            return CreatedAtAction(nameof(GetSubCategoryById), new { id = subcategory.SubCategoryId }, resultDto);
         }
 
         [HttpPut("SubCategory")]
