@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Runtime.InteropServices;
-using Application.Common;
 using Application.DTO.ProductDto;
+using Application.DTO.ProductImageDto;
+using Application.InputParams;
 using Application.ProductExtension;
 using AutoMapper;
 using CInfrastructure.Dbconnection;
@@ -30,24 +31,32 @@ namespace e_commerce.Controllers
         {
             var product= _context.Products
                 .Include(b=>b.Brand).Include(c=>c.Category)
-                .Include(sc=>sc.SubCategory).AsQueryable();
+                .Include(sc=>sc.SubCategory).Include(pi=>pi.Images).AsQueryable();
 
             product.SortProduct(productParams.Orderby);
             product.Search(productParams.ProductName);
             product.Filter(productParams.Category,productParams.Brand,productParams.SubCategory);
 
-            var products = await product.Select(x=> new GProductDto {
-                Description=x.Description,
-                Price=x.Price,
-                CategoryId=x.CategoryId,
-                BrandId=x.BrandId,
-                CategoryName=x.Category.Name,
-                ProductId=x.ProductId,
-                SubCategoryId=x.SubCategoryId,
-                SubCategoryName=x.SubCategory.Name,
-                BrandName=x.Brand.Name,
-                Name=x.Name,
-               
+            var products = await product.Select(x => new GProductDto {
+                Description = x.Description,
+                Price = x.Price,
+                CategoryId = x.CategoryId,
+                BrandId = x.BrandId,
+                CategoryName = x.Category.Name,
+                ProductId = x.ProductId,
+                SubCategoryId = x.SubCategoryId,
+                SubCategoryName = x.SubCategory.Name,
+                BrandName = x.Brand.Name,
+                BrandLogo=x.Brand.Logo,
+                Name = x.Name,
+                Images = x.Images.Select(y=>new GProductImageDto{
+                    ImageUrl=y.ImageUrl,
+                    AltText=y.AltText,
+                    ProductId=y.ProductId,
+                    Id=y.ImageId,
+                   
+                }).ToList(),
+
             }).ToListAsync();
 
             return Ok(products);
@@ -56,7 +65,7 @@ namespace e_commerce.Controllers
         public async Task <ActionResult> GetByProductId(int id)
         {
             var product= await _context.Products.Include(b=>b.Brand)
-                .Include(c=>c.Category).Include(sc=>sc.SubCategory)
+                .Include(c=>c.Category).Include(sc=>sc.SubCategory).Include(pi=>pi.Images)
                 .FirstOrDefaultAsync(p=>p.ProductId == id);
 
             var resultDto = _mapper.Map<GProductDto>(product);
@@ -68,17 +77,17 @@ namespace e_commerce.Controllers
         public  async Task<ActionResult> GetFilter()
         {
             var categories = await _context.Products
-                 .Select(x => new { x.Category.CategoryId, x.Category.Name })
+                 .Select(x =>x.Category.Name)
                  .Distinct()
                  .ToListAsync();
 
             var brands = await _context.Products
-                .Select(x => new { x.Brand.BrandId, x.Brand.Name })
+                .Select(x =>x.Brand.Name)
                 .Distinct()
                 .ToListAsync();
 
             var subcategories = await _context.Products
-                .Select(x => new { x.SubCategory.SubCategoryId, x.SubCategory.Name, x.SubCategory.CategoryId })
+                .Select(x =>x.SubCategory.Name)
                 .Distinct()
                 .ToListAsync();
 

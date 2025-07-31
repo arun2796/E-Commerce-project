@@ -1,10 +1,14 @@
+using Application.InputParams;
 using Application.RegisterAppServices;
 using CInfrastructure.Dbconnection;
+using e_commerce.MiddlewareExceptions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.Configure<CloudinarySetting>(builder.Configuration.GetSection("Cloudinary"));
+builder.Services.AddTransient<Middleware1>();
 builder.Services.ApplicationService();
 #region   Database connection 
 builder.Services.AddDbContext<ApplicationDbcontext>( option =>
@@ -26,6 +30,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseMiddleware<Middleware1>();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();

@@ -50,17 +50,17 @@ namespace CInfrastructure.Dbconnection
                 .HasForeignKey(b => b.BasketId)
                 .OnDelete(DeleteBehavior.Cascade); // Keep one cascade if needed
 
-            modelBuilder.Entity<BasketItems>()
-                .HasOne(b => b.Brand)
-                .WithMany()
-                .HasForeignKey(b => b.BrandId)
-                .OnDelete(DeleteBehavior.Restrict); // Change to Restrict or NoAction
+            //modelBuilder.Entity<BasketItems>()
+            //    .HasOne(b => b.Brand)
+            //    .WithMany()
+            //    .HasForeignKey(b => b.BrandId)
+            //    .OnDelete(DeleteBehavior.Restrict); // Change to Restrict or NoAction
 
-            modelBuilder.Entity<BasketItems>()
-                .HasOne(b => b.Category)
-                .WithMany()
-                .HasForeignKey(b => b.CategoryId)
-                .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<BasketItems>()
+            //    .HasOne(b => b.Category)
+            //    .WithMany()
+            //    .HasForeignKey(b => b.CategoryId)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<BasketItems>()
                 .HasOne(b => b.Product)

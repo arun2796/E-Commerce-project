@@ -7,6 +7,7 @@ using Application.DTO.Brand;
 using Application.DTO.BrandDtoF;
 using Application.DTO.CategoryDtoF;
 using Application.DTO.ProductDto;
+using Application.DTO.ProductImageDto;
 using Application.DTO.SubCategory;
 using AutoMapper;
 using Domain.Entity;
@@ -34,7 +35,11 @@ namespace Application.Common
             CreateMap<Product, GProductDto>()
                 .ForMember(dest=>dest.BrandName,opt=>opt.MapFrom(s=>s.Brand.Name))
                 .ForMember(dest=>dest.CategoryName,opt=>opt.MapFrom(s=>s.Category.Name))
-                .ForMember(dest=>dest.SubCategoryName,opt=>opt.MapFrom(s=>s.SubCategory.Name));
+                .ForMember(dest=>dest.SubCategoryName,opt=>opt.MapFrom(s=>s.SubCategory.Name))
+                .ForMember(dest=>dest.Images,opt=>opt.MapFrom(s=>s.Images));
+
+            CreateMap<ProductImages ,GProductImageDto>().ForMember(dest=>dest.Id,opt=>opt.MapFrom(s=>s.ImageId));
+            CreateMap<ProductImages, UProductImageDto>();
             
         }
     }

@@ -15,6 +15,8 @@ namespace Domain.Entity
         public required string ImageUrl { get; set; }
         public required string AltText { get; set; }
 
+        public string PublicId { get; set; } = null!;
+
         public int ProductId { get; set; }
 
         public Product Product { get; set; } = null!;

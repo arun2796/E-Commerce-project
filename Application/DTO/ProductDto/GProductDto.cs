@@ -26,10 +26,12 @@ namespace Application.DTO.ProductDto
 
         public string BrandName { get; set;} = null!;
 
+        public string BrandLogo {  get; set;} = null!;  
+
         public int SubCategoryId {  get; set; }
 
         public string SubCategoryName {  get; set; } = null!;   
 
-        public List<string> Images { get; set; } = [];
+        public List<GProductImageDto> Images { get; set; } = [];
     }
 }
