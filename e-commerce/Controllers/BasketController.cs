@@ -1,5 +1,6 @@
 ﻿using Application.DTO.BasketDtoF;
-using Application.Interface;
+
+using Application.IServices;
 using Application.ReturnBasket;
 using CInfrastructure.Dbconnection;
 using Domain.Entity;
@@ -13,26 +14,44 @@ namespace e_commerce.Controllers
     [ApiController]
     public class BasketController : ControllerBase
     {
-        private readonly IBasketExtension _basketExtension;
+        private readonly IBasketServices _basketServices;
         private readonly ApplicationDbcontext _context;
-        public BasketController( IBasketExtension basketExtension , ApplicationDbcontext context)
+        public BasketController(IBasketServices basketServices, ApplicationDbcontext context)
         {
-            _basketExtension = basketExtension;
+            _basketServices = basketServices;
             _context = context;
         }
+        [HttpGet]
+
+        public  async Task<ActionResult<BasketDto >>GetAllBasket()
+        {
+            var basket = await RetriveBasket() ?? throw new Exception("No basket ") ;
+
+            return Ok(basket.ReturnDto());
+
+        }
+
         [HttpPost]
         public async Task <ActionResult<BasketDto>> AddBasketItems(int productid ,int quantity)
         {
             var basket = await RetriveBasket();
 
             basket ??= CreateBasket();
+            if (string.IsNullOrEmpty(basket.BasketIdC))
+            {
+                return BadRequest("basket not create");
+            }
 
             var product =await _context.Products.FindAsync(productid);
             if (product == null)
             {
                 return BadRequest("problem in adding item in basket");
             }
-            _basketExtension.AddBasket(basket,product,quantity);
+            if (quantity == 0)
+            {
+                return Ok(product);
+            }
+            _basketServices.AddItemToBasketAsync(basket.BasketIdC, productid, quantity);
 
             var result = await _context.SaveChangesAsync() > 0;
 
@@ -83,6 +102,26 @@ namespace e_commerce.Controllers
             var basket = CreateBasket();
             await _context.SaveChangesAsync();
             return Ok(basket.ReturnDto());
+        }
+
+        [HttpDelete]
+        public async Task <ActionResult<BasketDto>> RemoveItemBasket( int product,int quantity)
+        {
+            var basket = await RetriveBasket();
+
+            if (basket == null) return BadRequest("Your Basket Is Empty ");
+
+            basket.RemoveItem(product, quantity);
+
+            var result = await _context.SaveChangesAsync() >0 ;
+
+            if(result) return Ok();
+
+            if (result == false)
+            {
+                return BadRequest("No changes in basket");
+            }
+           return Ok(basket);
         }
     }
 

@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Domain.Entity;
+using Application.AuthAccount;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace CInfrastructure.Dbconnection
 {
-    public class ApplicationDbcontext:DbContext
+    public class ApplicationDbcontext : IdentityDbContext<User>
     {
         public ApplicationDbcontext(DbContextOptions<ApplicationDbcontext> options):base(options)
         {
@@ -27,10 +30,28 @@ namespace CInfrastructure.Dbconnection
 
         public DbSet<Basket> Basket { get; set; }
 
+        public DbSet<Address> Addresses { get; set; }
+
         public DbSet<BasketItems> BasketItem { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            //modelBuilder.Entity<IdentityRole>().HasData(
+            //    new IdentityRole
+            //    {
+            //        Id = "e60a9a15-076c-4529-b86a-8bec53510584",
+            //        Name = "Admin",
+            //        NormalizedName = "ADMIN",
+            //    },
+            //    new IdentityRole
+            //    {
+            //        Id = "da791ffe-d132-43bd-9ca5-58a91e525b4b",
+            //        Name = "Member",
+            //        NormalizedName = "MEMBER",
+            //    }
+            //    );
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Category)
                 .WithMany()
@@ -67,6 +88,12 @@ namespace CInfrastructure.Dbconnection
                 .WithMany()
                 .HasForeignKey(b => b.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<User>()
+            //      .HasOne(u => u.Address)
+            //       .WithMany()
+            //    .HasForeignKey(u => u.AddressId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
         }
 
 
